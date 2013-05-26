@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+    <script type="text/javascript" src="./libs/enchant.js"></script>
+    <script type="text/javascript" src="./Dot.enchant.js"></script>
+    <script type="text/javascript" src="./Window.enchant.js"></script>
+    <script type="text/javascript" src="./libs/widget.enchant.js"></script>
+	<script type="text/javascript">
+		enchant();
+		
+		var lastDate = new Date;
+		var framedata = 0;
+        var dots = [];
+		window.onload = function() {
+			var game = new Core(320, 320);
+            game.fps = 20;
+            game.preload("./images/chara1.png");
+			game.onload = function(){
+
+                var sc = new Scene();
+                game.pushScene(sc);
+                var dw = new DotWindow();
+                sc.addChild(dw);
+
+                var createDialog = function(dx, dy){
+                    //ダイアログレイヤー生成
+                    var menu = new MenuWindow(240, 170);
+                    menu.addChildTo(sc);//独自addChildメソッド
+                    menu.dig.x = dx;
+                    menu.dig.y = dy;
+
+                    bear = new Sprite(32, 32);
+                    bear.x = 185;
+                    bear.y = 10;
+                    bear.image = game.assets['./images/chara1.png'];
+                    bear.frame = [6,6,7,7];
+                    menu.dig.addChild(bear);
+                    bear.onenterframe = function(){
+                        this.y += Math.sin(Math.PI/45 * this.age);
+                    };
+                    bear.addEventListener('touchstart', function(){
+                        this.scaleX *= -1;
+                    });
+
+                    //ダイアログにアイテムリストを生成
+                    var listView = new ListView(160, 160, true);
+                    listView.x = 5;
+                    listView.y = 5;
+
+                    var item0 = new ListItem(160, 32);
+                    item0.content = 'dot';
+                    listView.addChild(item0); 
+                    //ドット生産処理
+                    item0.ontap = function(){
+                        dw.createDots(500);
+                    };
+
+                    var item1 = new ListItem(160, 32);
+                    item1.content = 'delete';
+                    listView.addChild(item1);
+                    //ドット削除処理
+                    item1.ontap = function(){
+                        dw.deleteAllDots();
+                    };
+                    
+                    var item2 = new ListItem(160, 32);
+                    item2.content = 'close';
+                    listView.addChild(item2);
+                    //ダイアログの終了
+                    item2.ontap = function(){
+                        menu.removeChildFrom(sc);
+                        console.log("closing");
+                    }; 
+
+                    var item3 = new ListItem(160, 32);
+                    item3.content = 'chane red';
+                    listView.addChild(item3);
+                    //ドットを赤に変更
+                    item3.ontap = function(){
+                        dw.changeDotImage(1);
+                        console.log("red")
+                    };
+
+                    var item4 = new ListItem(160, 32);
+                    item4.content = 'chane blue';
+                    listView.addChild(item4);
+                    //ドットを青に変更
+                    item4.ontap = function(){
+                        dw.changeDotImage(5);
+                        console.log("blue")
+                    };
+
+                    var item5 = new ListItem(160, 32);
+                    item5.content = 'chane random';
+                    listView.addChild(item5);
+                    //ドットをランダム色に変更
+                    item5.ontap = function(){
+                        dw.changeDotImage(50);
+                        console.log("random")
+                    };
+
+                    var item6 = new ListItem(160, 32);
+                    item6.content = 'sub window';
+                    listView.addChild(item6);
+                    //ウィンドウを追加
+                    item6.ontap = function(){
+                        createDialog(100, 200);
+                    };
+
+                    menu.dig.addChild(listView);
+                };
+
+                createDialog(80, 180);
+
+                var label = new Label("");
+                label.x = 180;label.y = 0;
+                label.text = "menu";
+                label.font = "20px sans bold";
+                label.color = "black";
+                label.addEventListener('touchstart', function(){
+                    createDialog(80, 180);        
+                })
+                dw.addChild(label);
+
+			}
+			game.start();
+		}
+	</script>
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+	
+</body>
+</html>
