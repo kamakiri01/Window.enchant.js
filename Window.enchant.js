@@ -49,23 +49,31 @@ var MenuWindow = enchant.Class.create(LayerWindow, {
         this.dig._touchY = 0;
 
         //ダイアログBGの設定
-        var bg = new Sprite(width, height);
-        var np = new enchant.widget.Ninepatch(width, height);
-        np.src = enchant.Core.instance.assets['navigationBar.png'];
-        bg.image = np;
-        this.dig.addChild(bg);
-
-        //背景部分をタッチしてウインドウ移動
-        bg._dig = this.dig;
+        this.bg = new Sprite(width, height);
+        var sf = new Surface(width, height);
+        sf.context.fillStyle = 'rgb(0, 0, 0)';
+        sf.context.fillRect(0, 0, width, height);   //draw edge
+        sf.context.fillStyle = 'rgb(35, 50, 120)';
+        sf.context.fillRect(1, 1, width-2, height-2);
+        this.bg.image = sf;
         
-        bg.addEventListener('touchstart', function(){
-            bg._dig._isTouch = true;
+        //if want to use 9path for Sprite[bg], load widget.enchant.js and use this code.
+        //var np = new enchant.widget.Ninepatch(width, height);
+        //np.src = enchant.Core.instance.assets['navigationBar.png'];
+        //bg.image = np;
+        this.dig.addChild(this.bg);
+
+        //bgタッチイベントからダイアログ全体に処理を呼ぶための関連
+        this.bg._dig = this.dig;
+        
+        this.bg.addEventListener('touchstart', function(){
+            this._dig._isTouch = true;
         });
-        bg.addEventListener('touchend', function(){
-            bg._dig._isTouch = false;
+        this.bg.addEventListener('touchend', function(){
+            this._dig._isTouch = false;
         });
 
-        //ウインドウ移動処理
+        //ウインドウタッチ移動処理
         this.dig.addEventListener('touchstart', function(e){
             this._touchX = e.x - this.x;
             this._touchY = e.y - this.y;
