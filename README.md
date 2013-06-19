@@ -12,6 +12,7 @@ read
 
 - [read this entry](http://scriptogr.am/kamakiri/post/window.enchant.js-)
 
+- [sample](http://kamakiri01.github.io/Window.enchant.js/sample.html)
 
 enchant.js
 --------
