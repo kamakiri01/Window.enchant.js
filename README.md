@@ -10,7 +10,7 @@ popup window.
 read
 --------
 
-- [read this entry](http://scriptogr.am/kamakiri/post/window.enchant.js)
+- [read this entry](http://scriptogr.am/kamakiri/post/window.enchant.js-)
 
 
 enchant.js
